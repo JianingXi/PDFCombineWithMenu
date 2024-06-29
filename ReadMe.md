@@ -1,6 +1,3 @@
-## README.md（第一部分）
-
-```markdown
 # PDFCombineWithMenu
 
 ## Overview
@@ -226,11 +223,7 @@ You can customize the footer size and page numbering options by modifying the `a
 
 - **页脚大小**：通过修改相应的变量来调整页脚的大小。
 - **页码格式**：自定义页码的格式和位置。
-好的，以下是 README 文件的第二部分：
 
-## README.md（第二部分）
-
-```markdown
 ## Directory Structure
 
 After running the `organize_pdfs_and_images.py` script, the directory structure will be organized as follows:
