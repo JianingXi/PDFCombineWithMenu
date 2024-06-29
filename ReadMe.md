@@ -1,44 +1,48 @@
-# PDFCombineWithMenu
+# PDF and Image Processing Scripts
 
 ## Overview
 
-This project provides a Python script for organizing PDF files and images into a directory structure based on their folder and file names. It also adds footers with page numbers of the same size to the first page or all pages of the PDFs and images.
+This project provides a set of Python scripts for processing PDFs and images, including converting PDFs to images, adding page numbers to images, merging images into a single PDF, and creating an index document in DOCX format.
 
-本项目提供了一个Python脚本，用于根据文件夹和文件名将PDF文件和图像整理为目录结构，并在PDF和图像的首页或所有页面添加相同尺寸的页脚页码。
+本项目提供了一组用于处理PDF和图像的Python脚本，包括将PDF转换为图像、在图像上添加页码、将图像合并为单个PDF，以及创建DOCX格式的索引文档。
 
 ## Features
 
-- **Organize PDFs and Images**: Automatically organize PDFs and images into a directory structure.
-- **Add Footers**: Add footers with page numbers to PDFs and images.
-- **Customizable**: Easily customize the footer size and page numbering options.
+- **Convert PDF to Images**: Convert each page of a PDF to an image.
+- **Add Page Numbers**: Add page numbers and borders to images.
+- **Merge Images to PDF**: Merge multiple images into a single PDF document.
+- **Create Index Document**: Generate a DOCX document with an index of all images.
 
 功能特点：
 
-- **整理PDF和图像**：自动将PDF和图像整理为目录结构。
-- **添加页脚**：在PDF和图像的页面添加页脚页码。
-- **可定制**：轻松定制页脚大小和页码选项。
+- **将PDF转换为图像**：将PDF的每一页转换为图像。
+- **添加页码**：在图像上添加页码和边框。
+- **将图像合并为PDF**：将多张图像合并为一个PDF文档。
+- **创建索引文档**：生成包含所有图像索引的DOCX文档。
 
 ## Requirements
 
 - Python 3.x
-- PyPDF2
-- PIL (Python Imaging Library)
-- reportlab
+- PIL (Pillow)
+- pdf2image
+- fpdf
+- python-docx
 
 安装要求：
 
 - Python 3.x
-- PyPDF2
-- PIL（Python图像库）
-- reportlab
+- PIL (Pillow)
+- pdf2image
+- fpdf
+- python-docx
 
 ## Installation
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/PDFCombineWithMenu.git
-   cd PDFCombineWithMenu
+   git clone https://github.com/yourusername/PDFImageProcessing.git
+   cd PDFImageProcessing
    ```
 
 2. Install the required packages:
@@ -52,8 +56,8 @@ This project provides a Python script for organizing PDF files and images into a
 1. 克隆仓库：
 
    ```bash
-   git clone https://github.com/yourusername/PDFCombineWithMenu.git
-   cd PDFCombineWithMenu
+   git clone https://github.com/yourusername/PDFImageProcessing.git
+   cd PDFImageProcessing
    ```
 
 2. 安装所需的软件包：
@@ -64,332 +68,336 @@ This project provides a Python script for organizing PDF files and images into a
 
 ## Usage
 
-### Organize PDFs and Images
+### Convert PDF to Images
 
-To organize PDFs and images, run the script with the directory containing your files:
+To convert a PDF to images, use the `F01TraverseAllPDFImageToImage.py` script. Make sure to specify the source folder containing the PDFs and the destination folder for the images.
 
 ```bash
-python organize_pdfs_and_images.py /path/to/your/files
+python F01TraverseAllPDFImageToImage.py /path/to/source_folder /path/to/destination_folder
 ```
 
-### Add Footers
+### Add Page Numbers to Images
 
-To add footers with page numbers to the first page or all pages of PDFs and images, use the following command:
+To add page numbers and borders to images, use the `F02AddPageNumber.py` script. Specify the input folder containing the images and the output folder for the processed images.
 
 ```bash
-python add_footers.py /path/to/your/files --all
+python F02AddPageNumber.py /path/to/input_folder /path/to/output_folder
 ```
 
-For adding footers to the first page only:
+### Merge Images to Single PDF
+
+To merge multiple images into a single PDF document, use the `F03MergeImgToSinglePDF.py` script. Specify the folder containing the images and the output PDF file path.
 
 ```bash
-python add_footers.py /path/to/your/files
+python F03MergeImgToSinglePDF.py /path/to/image_folder /path/to/output.pdf
+```
+
+### Create Index Document
+
+To generate a DOCX document with an index of all images, use the `F04CreateMenuDocx.py` script. Specify the input folder containing the images and the output folder for the DOCX file.
+
+```bash
+python F04CreateMenuDocx.py /path/to/input_folder /path/to/output_folder
 ```
 
 使用方法：
 
-### 整理PDF和图像
+### 将PDF转换为图像
 
-要整理PDF和图像，请运行脚本并提供包含文件的目录：
+要将PDF转换为图像，请使用 `F01TraverseAllPDFImageToImage.py` 脚本。请确保指定包含PDF的源文件夹和用于保存图像的目标文件夹。
 
 ```bash
-python organize_pdfs_and_images.py /path/to/your/files
+python F01TraverseAllPDFImageToImage.py /path/to/source_folder /path/to/destination_folder
 ```
 
-### 添加页脚
+### 在图像上添加页码
 
-要在PDF和图像的首页或所有页面添加页脚页码，请使用以下命令：
+要在图像上添加页码和边框，请使用 `F02AddPageNumber.py` 脚本。指定包含图像的输入文件夹和保存处理后图像的输出文件夹。
 
 ```bash
-python add_footers.py /path/to/your/files --all
+python F02AddPageNumber.py /path/to/input_folder /path/to/output_folder
 ```
 
-如果只在首页添加页脚：
+### 将图像合并为单个PDF
+
+要将多张图像合并为一个PDF文档，请使用 `F03MergeImgToSinglePDF.py` 脚本。指定包含图像的文件夹和输出PDF文件路径。
 
 ```bash
-python add_footers.py /path/to/your/files
+python F03MergeImgToSinglePDF.py /path/to/image_folder /path/to/output.pdf
+```
+
+### 创建索引文档
+
+要生成包含所有图像索引的DOCX文档，请使用 `F04CreateMenuDocx.py` 脚本。指定包含图像的输入文件夹和用于保存DOCX文件的输出文件夹。
+
+```bash
+python F04CreateMenuDocx.py /path/to/input_folder /path/to/output_folder
 ```
 
 ## Script Details
 
-### organize_pdfs_and_images.py
+### F01TraverseAllPDFImageToImage.py
 
-This script organizes PDFs and images into a directory structure based on their folder and file names.
+This script converts PDF files to images. It can process all pages of a PDF or just the first page.
 
-- **Input**: Directory containing PDF files and images.
-- **Output**: Organized directory structure.
+- **Input**: Source folder containing PDF files.
+- **Output**: Destination folder with converted images.
 
-### add_footers.py
+### F02AddPageNumber.py
 
-This script adds footers with page numbers to PDFs and images. You can choose to add footers to the first page or all pages.
+This script adds page numbers and borders to images.
 
-- **Input**: Directory containing PDF files and images.
-- **Options**: 
-  - `--all`: Add footers to all pages.
-  - Default: Add footers to the first page only.
-- **Output**: PDFs and images with added footers.
+- **Input**: Folder containing images.
+- **Output**: Folder with images that have added page numbers and borders.
+
+### F03MergeImgToSinglePDF.py
+
+This script merges multiple images into a single PDF document.
+
+- **Input**: Folder containing images.
+- **Output**: Single PDF file.
+
+### F04CreateMenuDocx.py
+
+This script generates a DOCX document with an index of all images in a specified folder.
+
+- **Input**: Folder containing images.
+- **Output**: DOCX file with the index.
 
 脚本详情：
 
-### organize_pdfs_and_images.py
+### F01TraverseAllPDFImageToImage.py
 
-此脚本根据文件夹和文件名将PDF和图像整理为目录结构。
+此脚本将PDF文件转换为图像。它可以处理PDF的所有页面或仅处理首页。
 
-- **输入**：包含PDF文件和图像的目录。
-- **输出**：整理后的目录结构。
+- **输入**：包含PDF文件的源文件夹。
+- **输出**：包含转换后图像的目标文件夹。
 
-### add_footers.py
+### F02AddPageNumber.py
 
-此脚本在PDF和图像的页面添加页脚页码。你可以选择在首页或所有页面添加页脚。
+此脚本在图像上添加页码和边框。
 
-- **输入**：包含PDF文件和图像的目录。
-- **选项**：
-  - `--all`：在所有页面添加页脚。
-  - 默认：仅在首页添加页脚。
-- **输出**：添加了页脚的PDF和图像。
+- **输入**：包含图像的文件夹。
+- **输出**：添加了页码和边框的图像文件夹。
+
+### F03MergeImgToSinglePDF.py
+
+此脚本将多张图像合并为一个PDF文档。
+
+- **输入**：包含图像的文件夹。
+- **输出**：单个PDF文件。
+
+### F04CreateMenuDocx.py
+
+此脚本生成包含指定文件夹中所有图像索引的DOCX文档。
+
+- **输入**：包含图像的文件夹。
+- **输出**：包含索引的DOCX文件。
+
+
+## Detailed Steps for Each Script
+
+### F01TraverseAllPDFImageToImage.py
+
+#### Step 1: Load PDF Files
+
+The script loads PDF files from the specified source folder.
+
+#### Step 2: Convert PDF Pages to Images
+
+It converts each page of the PDF files to JPG images. If `all_pages` is set to True, all pages are converted; otherwise, only the first page is converted.
+
+#### Step 3: Rotate Images if Necessary
+
+The script checks if the images need to be rotated (for landscape orientation) and rotates them accordingly.
+
+#### Step 4: Save the Images
+
+The converted images are saved to the specified destination folder.
+
+### F02AddPageNumber.py
+
+#### Step 1: Load Images
+
+The script loads images from the specified input folder.
+
+#### Step 2: Resize Images
+
+It resizes images to a target length while maintaining the aspect ratio.
+
+#### Step 3: Add Borders and Page Numbers
+
+The script adds borders and page numbers to the images.
+
+#### Step 4: Save the Processed Images
+
+The processed images are saved to the specified output folder.
+
+### F03MergeImgToSinglePDF.py
+
+#### Step 1: Load Images
+
+The script loads JPG images from the specified input folder.
+
+#### Step 2: Create PDF Pages
+
+It creates a new PDF document and adds each image as a page, ensuring proper orientation and scaling.
+
+#### Step 3: Save the PDF
+
+The resulting PDF is saved to the specified output path.
+
+### F04CreateMenuDocx.py
+
+#### Step 1: Load Images
+
+The script loads JPG images from the specified input folder.
+
+#### Step 2: Create DOCX Document
+
+It creates a DOCX document and adds each image file name with corresponding page numbers.
+
+#### Step 3: Save the DOCX
+
+The DOCX document is saved to the specified output folder.
 
 ## Examples
 
 Here are some examples of how to use the scripts.
 
-### Example 1: Organize Files
+### Example 1: Convert PDF to Images
 
-Suppose you have the following directory structure:
+```python
+from F01TraverseAllPDFImageToImage import process_files
 
-```
-/path/to/your/files
-├── folder1
-│   ├── file1.pdf
-│   ├── file2.jpg
-├── folder2
-│   ├── file3.pdf
-│   ├── file4.png
+source_folder = '/path/to/source_folder'
+destination_folder = '/path/to/destination_folder'
+all_pages = True
+
+process_files(source_folder, destination_folder, all_pages)
 ```
 
-To organize these files, run:
+### Example 2: Add Page Numbers to Images
 
-```bash
-python organize_pdfs_and_images.py /path/to/your/files
+```python
+from F02AddPageNumber import process_images
+
+input_folder = '/path/to/input_folder'
+output_folder = '/path/to/output_folder'
+target_dpi = 300
+target_length = 1920
+add_border_and_page_number = True
+
+process_images(input_folder, output_folder, target_dpi, target_length, add_border_and_page_number)
 ```
 
-### Example 2: Add Footers
+### Example 3: Merge Images to Single PDF
 
-To add footers with page numbers to all pages of PDFs and images:
+```python
+from F03MergeImgToSinglePDF import images_to_pdf
 
-```bash
-python add_footers.py /path/to/your/files --all
+image_folder = '/path/to/image_folder'
+output_pdf_path = '/path/to/output.pdf'
+
+images_to_pdf(image_folder, output_pdf_path)
+```
+
+### Example 4: Create Index Document
+
+```python
+from F04CreateMenuDocx import generate_index
+
+input_folder = '/path/to/input_folder'
+output_folder = '/path/to/output_folder'
+
+generate_index(input_folder, output_folder)
 ```
 
 示例：
 
-### 示例1：整理文件
-
-假设你有以下目录结构：
-
-```
-/path/to/your/files
-├── folder1
-│   ├── file1.pdf
-│   ├── file2.jpg
-├── folder2
-│   ├── file3.pdf
-│   ├── file4.png
-```
-
-要整理这些文件，运行：
-
-```bash
-python organize_pdfs_and_images.py /path/to/your/files
-```
-
-### 示例2：添加页脚
-
-要在PDF和图像的所有页面添加页脚页码：
-
-```bash
-python add_footers.py /path/to/your/files --all
-```
-
-## Customization
-
-You can customize the footer size and page numbering options by modifying the `add_footers.py` script. Look for the following sections in the script:
-
-- **Footer Size**: Adjust the size of the footer by modifying the corresponding variables.
-- **Page Numbering**: Customize the page numbering format and position.
-
-自定义：
-
-你可以通过修改 `add_footers.py` 脚本来自定义页脚大小和页码选项。请查找脚本中的以下部分：
-
-- **页脚大小**：通过修改相应的变量来调整页脚的大小。
-- **页码格式**：自定义页码的格式和位置。
-
-## Directory Structure
-
-After running the `organize_pdfs_and_images.py` script, the directory structure will be organized as follows:
-
-```
-/organized
-├── folder1
-│   ├── file1.pdf
-│   ├── file2.jpg
-├── folder2
-│   ├── file3.pdf
-│   ├── file4.png
-```
-
-Each folder will contain the corresponding PDFs and images organized by their original folder and file names.
-
-目录结构：
-
-运行 `organize_pdfs_and_images.py` 脚本后，目录结构将如下组织：
-
-```
-/organized
-├── folder1
-│   ├── file1.pdf
-│   ├── file2.jpg
-├── folder2
-│   ├── file3.pdf
-│   ├── file4.png
-```
-
-每个文件夹将包含按原文件夹和文件名整理的相应PDF和图像。
-
-## Detailed Steps for Adding Footers
-
-### Step 1: Load PDF and Image Files
-
-The script first loads all PDF and image files from the specified directory.
-
-### Step 2: Create Footer Template
-
-A footer template is created using the `reportlab` library, which includes the page number.
-
-### Step 3: Add Footer to PDFs
-
-For each PDF, the script adds the footer template to the first page or all pages, based on the specified options.
-
-### Step 4: Add Footer to Images
-
-For each image, the script converts the image to PDF format (if not already a PDF), adds the footer template, and saves the result.
-
-### Step 5: Save the Result
-
-The modified PDFs and images are saved in the organized directory structure.
-
-添加页脚的详细步骤：
-
-### 第一步：加载PDF和图像文件
-
-脚本首先从指定目录加载所有PDF和图像文件。
-
-### 第二步：创建页脚模板
-
-使用 `reportlab` 库创建页脚模板，其中包含页码。
-
-### 第三步：将页脚添加到PDF
-
-对于每个PDF，脚本根据指定的选项将页脚模板添加到首页或所有页面。
-
-### 第四步：将页脚添加到图像
-
-对于每个图像，脚本将图像转换为PDF格式（如果尚未转换），添加页脚模板，并保存结果。
-
-### 第五步：保存结果
-
-修改后的PDF和图像将保存到组织好的目录结构中。
-
-## Example Code Snippets
-
-Here are some example code snippets that demonstrate how to use the scripts.
-
-### Example 1: Organize Files
+### 示例1：将PDF转换为图像
 
 ```python
-import os
-from organize_pdfs_and_images import organize_files
+from F01TraverseAllPDFImageToImage import process_files
 
-# Specify the directory containing your files
-directory = '/path/to/your/files'
+source_folder = '/path/to/source_folder'
+destination_folder = '/path/to/destination_folder'
+all_pages = True
 
-# Organize the files
-organize_files(directory)
+process_files(source_folder, destination_folder, all_pages)
 ```
 
-### Example 2: Add Footers
+### 示例2：在图像上添加页码
 
 ```python
-import os
-from add_footers import add_footers
+from F02AddPageNumber import process_images
 
-# Specify the directory containing your files
-directory = '/path/to/your/files'
+input_folder = '/path/to/input_folder'
+output_folder = '/path/to/output_folder'
+target_dpi = 300
+target_length = 1920
+add_border_and_page_number = True
 
-# Add footers to all pages
-add_footers(directory, all_pages=True)
-
-# Add footers to the first page only
-add_footers(directory, all_pages=False)
+process_images(input_folder, output_folder, target_dpi, target_length, add_border_and_page_number)
 ```
 
-代码示例：
-
-### 示例1：整理文件
+### 示例3：将图像合并为单个PDF
 
 ```python
-import os
-from organize_pdfs_and_images import organize_files
+from F03MergeImgToSinglePDF import images_to_pdf
 
-# 指定包含文件的目录
-directory = '/path/to/your/files'
+image_folder = '/path/to/image_folder'
+output_pdf_path = '/path/to/output.pdf'
 
-# 整理文件
-organize_files(directory)
+images_to_pdf(image_folder, output_pdf_path)
 ```
 
-### 示例2：添加页脚
+### 示例4：创建索引文档
 
 ```python
-import os
-from add_footers import add_footers
+from F04CreateMenuDocx import generate_index
 
-# 指定包含文件的目录
-directory = '/path/to/your/files'
+input_folder = '/path/to/input_folder'
+output_folder = '/path/to/output_folder'
 
-# 在所有页面添加页脚
-add_footers(directory, all_pages=True)
-
-# 仅在首页添加页脚
-add_footers(directory, all_pages=False)
+generate_index(input_folder, output_folder)
 ```
 
 ## Troubleshooting
 
-### Issue: Missing Fonts
+### Issue: Incorrect Page Order
 
-If you encounter issues with missing fonts when adding footers, make sure you have the necessary fonts installed on your system. You can also specify a different font in the `add_footers.py` script.
+Ensure that the image files are named sequentially and follow the correct order before processing.
 
-### Issue: Unsupported File Formats
+### Issue: Missing Images
 
-If you encounter issues with unsupported file formats, ensure that all files in the specified directory are either PDFs or images (JPG, PNG).
+Verify that all images are present in the specified directories and are named correctly. Check the console output for any error messages.
+
+### Issue: Unsupported File Format
+
+Ensure that all files in the specified directories are in the correct format (PDF for conversion, JPG for merging).
 
 故障排除：
 
-### 问题：缺少字体
+### 问题：页面顺序错误
 
-如果在添加页脚时遇到字体缺失问题，请确保系统中已安装必要的字体。你也可以在 `add_footers.py` 脚本中指定不同的字体。
+确保图像文件按顺序命名，并在处理前遵循正确的顺序。
+
+### 问题：缺少图像
+
+验证所有图像是否存在于指定目录中，并正确命名。检查控制台输出以获取任何错误消息。
 
 ### 问题：不支持的文件格式
 
-如果遇到不支持的文件格式问题，请确保指定目录中的所有文件都是PDF或图像（JPG，PNG）。
+确保指定目录中的所有文件都为正确的格式（转换时为PDF，合并时为JPG）。
 
 ## Future Improvements
 
 Here are some potential improvements for the project:
 
 - **Enhanced Error Handling**: Improve error handling to provide more informative messages and handle edge cases.
-- **Additional File Formats**: Add support for additional file formats.
+- **Additional File Formats**: Add support for additional file formats like PNG, TIFF.
+- **Automatic Sorting**: Implement automatic sorting of image files to ensure correct order.
 - **GUI Interface**: Develop a graphical user interface for easier use.
 
 未来改进：
@@ -397,16 +405,15 @@ Here are some potential improvements for the project:
 以下是该项目的一些潜在改进：
 
 - **增强错误处理**：改进错误处理以提供更有用的信息并处理边缘情况。
-- **更多文件格式**：添加对更多文件格式的支持。
+- **更多文件格式**：添加对其他文件格式（如PNG，TIFF）的支持。
+- **自动排序**：实现图像文件的自动排序，确保正确的顺序。
 - **图形用户界面**：开发图形用户界面以便更容易使用。
 
-## Contact
+## Contributing
 
-For any questions or issues, please contact [yourname] at [youremail@example.com].
+Contributions are welcome! Please feel free to submit a Pull Request or open an Issue if you encounter any problems.
 
-联系方式：
-
-如果有任何问题或疑问，请联系 [yourname]，邮箱 [youremail@example.com]。
+欢迎贡献！如果你遇到任何问题，请随时提交拉取请求或打开问题。
 
 ## License
 
@@ -415,3 +422,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 许可证：
 
 本项目采用 MIT 许可证。详情请参阅 [LICENSE](LICENSE) 文件。
+
