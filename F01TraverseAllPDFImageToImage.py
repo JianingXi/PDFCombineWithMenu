@@ -18,15 +18,16 @@ def convert_image_to_jpg(image_path, output_path):
         print(f"Image converted to JPG: {output_path}")
 
 def convert_pdf_to_jpg(input_pdf_path, output_folder, all_pages=False, dpi=150):
+    poppler_path = r'C:\Tools\poppler-24.02.0\Library\bin'  # 确保这个路径指向 Poppler 的 bin 目录
     if all_pages:
-        pages = convert_from_path(input_pdf_path, dpi=dpi)
+        pages = convert_from_path(input_pdf_path, dpi=dpi, poppler_path=poppler_path)
         for page_number, page in enumerate(pages):
             output_jpg_path = os.path.join(output_folder, f"page_{str(page_number + 1).zfill(4)}.jpg")
             page.save(output_jpg_path, 'JPEG', quality=95, dpi=(100, 100))
             rotate_image_if_landscape(output_jpg_path)
             print(f"PDF page {page_number + 1} converted to JPG: {output_jpg_path}")
     else:
-        pages = convert_from_path(input_pdf_path, dpi=dpi, first_page=1, last_page=1)
+        pages = convert_from_path(input_pdf_path, dpi=dpi, first_page=1, last_page=1, poppler_path=poppler_path)
         output_jpg_path = os.path.join(output_folder, "page_0001.jpg")
         pages[0].save(output_jpg_path, 'JPEG', quality=95, dpi=(100, 100))
         rotate_image_if_landscape(output_jpg_path)
@@ -39,21 +40,25 @@ def rotate_image_if_landscape(image_path):
             img.save(image_path, 'JPEG', quality=95, dpi=(100, 100))
             print(f"Rotated image: {image_path}")
 
-def resize_to_same_length(image, target_length):
+def resize_to_same_length(image, target_length, min_length=500):
     # 保持图像的宽高比例调整大小
-    if image.width > image.height:
-        new_width = target_length
-        new_height = int(target_length * image.height / image.width)
+    if max(image.width, image.height) > target_length and min(image.width, image.height) > min_length:
+        if image.width > image.height:
+            new_width = target_length
+            new_height = int(target_length * image.height / image.width)
+        else:
+            new_height = target_length
+            new_width = int(target_length * image.width / image.height)
+        return image.resize((new_width, new_height), Image.LANCZOS)
     else:
-        new_height = target_length
-        new_width = int(target_length * image.width / image.height)
-    return image.resize((new_width, new_height), Image.LANCZOS)
+        return image  # 如果图像尺寸小于最小长度，则不调整大小
 
 def process_files(source_folder, output_folder, all_pages=False):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
     min_length = float('inf')
+    max_length = 2000  # 设置一个最大长度，确保不会过度缩小图片
 
     for root, _, files in os.walk(source_folder):
         for file in files:
@@ -61,6 +66,8 @@ def process_files(source_folder, output_folder, all_pages=False):
             if file.lower().endswith(('.png', '.gif', '.bmp', '.tiff', '.jpeg', '.jpg')):
                 with Image.open(file_path) as img:
                     min_length = min(min_length, img.width, img.height)
+
+    min_length = max(min_length, max_length)  # 使用最大长度的图片作为基准
 
     for root, _, files in os.walk(source_folder):
         for file in files:
@@ -77,7 +84,7 @@ def process_files(source_folder, output_folder, all_pages=False):
                 with Image.open(file_path) as img:
                     img = resize_to_same_length(img, min_length)
                     img = img.convert('RGB')  # 转换为RGB模式
-                    img.save(output_jpg_path, 'JPEG', quality=100, dpi=(800, 800))
+                    img.save(output_jpg_path, 'JPEG', quality=95, dpi=(300, 300))  # 修改质量和DPI
                     rotate_image_if_landscape(output_jpg_path)
             elif file.lower().endswith('.pdf'):
                 pdf_output_folder = os.path.join(output_relative_folder, os.path.splitext(file)[0])
@@ -86,7 +93,7 @@ def process_files(source_folder, output_folder, all_pages=False):
                 convert_pdf_to_jpg(file_path, pdf_output_folder, all_pages)
 
 # 示例使用
-source_folder = r'C:\Users\DELL\Desktop\研究生项目A02_校内获批与打印\支撑材料'
-destination_folder = r'C:\Users\DELL\Desktop\研究生项目A02_校内获批与打印\AAAA'
-all_pages = False  # 设置为True以转换PDF的所有页面，否则仅转换首页
+source_folder = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\P00原版'
+destination_folder = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\P01纯图版'
+all_pages = True  # 设置为True以转换PDF的所有页面，否则仅转换首页
 process_files(source_folder, destination_folder, all_pages)

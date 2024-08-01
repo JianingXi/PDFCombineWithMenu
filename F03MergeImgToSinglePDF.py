@@ -9,7 +9,17 @@ class PDF(FPDF):
     def footer(self):
         pass
 
-def images_to_pdf(input_folder, output_pdf_path):
+def compress_image(image_path, output_path, quality):
+    img = Image.open(image_path)
+    img = img.convert('RGB')
+    img.save(output_path, 'JPEG', quality=quality)
+    return output_path
+
+def images_to_pdf(input_folder, output_pdf_path, compressed_folder, quality):
+    # 创建压缩后的图片存储文件夹
+    if not os.path.exists(compressed_folder):
+        os.makedirs(compressed_folder)
+
     # 获取所有JPG文件，按字母表顺序排序
     image_files = sorted([f for f in os.listdir(input_folder) if f.lower().endswith('.jpg')])
 
@@ -22,7 +32,12 @@ def images_to_pdf(input_folder, output_pdf_path):
 
     for image_file in image_files:
         image_path = os.path.join(input_folder, image_file)
-        img = Image.open(image_path)
+        compressed_image_path = os.path.join(compressed_folder, image_file)
+
+        # 压缩图像
+        compress_image(image_path, compressed_image_path, quality)
+
+        img = Image.open(compressed_image_path)
         width, height = img.size
 
         # 将图像尺寸转换为PDF尺寸（单位为毫米，1像素 = 0.264583毫米）
@@ -47,7 +62,7 @@ def images_to_pdf(input_folder, output_pdf_path):
         y = (page_height_mm - display_height_mm) / 2
 
         # 添加图像
-        pdf.image(image_path, x, y, display_width_mm, display_height_mm)
+        pdf.image(compressed_image_path, x, y, display_width_mm, display_height_mm)
 
     # 确保输出路径是一个有效的文件路径
     if not output_pdf_path.lower().endswith('.pdf'):
@@ -57,6 +72,10 @@ def images_to_pdf(input_folder, output_pdf_path):
     print(f"PDF file created: {output_pdf_path}")
 
 # 示例使用
-input_folder = r'C:\Users\DELL\Desktop\研究生项目A02_校内获批与打印\BBBB'
-output_pdf_path = r'C:\Users\DELL\Desktop\研究生项目A02_校内获批与打印\CCCC\output.pdf'
-images_to_pdf(input_folder, output_pdf_path)
+input_folder = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\P02编号版'
+compressed_folder = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\compressed'
+output_pdf_path = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\附件作证材料.pdf'
+
+quality = 95  # 设置压缩率，范围在1（最差）到95（最好）之间
+
+images_to_pdf(input_folder, output_pdf_path, compressed_folder, quality)
