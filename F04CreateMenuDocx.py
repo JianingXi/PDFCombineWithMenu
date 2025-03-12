@@ -84,8 +84,8 @@ def create_menu_and_index(image_dir, output_docx, initial_page_number=1):
     print(f"Document saved at {output_docx}")
 
 # 示例使用
-image_dir = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\P02编号版'
-output_docx = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\附件目录.docx'
+image_dir = r'C:\Users\素材Temp\Page'
+output_docx = r'C:\Users\素材Temp\目录.docx'
 initial_page_number = 1  # 替换为你的初始页码
 
 create_menu_and_index(image_dir, output_docx, initial_page_number)

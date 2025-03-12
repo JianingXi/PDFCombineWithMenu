@@ -68,8 +68,8 @@ def process_images(input_folder, output_folder, initial_page_number=1, target_dp
             print(f"Processed {image_path}")
 
 # 示例使用
-input_folder = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\P01纯图版'
-output_folder = r'C:\Users\xijia\Desktop\D20240731_省级思政示范项目\B03支撑材料附件\P02编号版'
+input_folder = r'C:\Users\素材Temp'
+output_folder = r'C:\Users\素材TempPage'
 initial_page_number = 1  # 设置初始页码
 target_dpi = 800
 target_length = 1920
