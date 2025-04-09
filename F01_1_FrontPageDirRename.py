@@ -33,5 +33,5 @@ def rename_and_move_files(directory):
 
 
 # 使用示例
-directory_to_check = r"C:\Users\xijia\Desktop\DoingPlatform\D20250308_广州市青年人才托举\B02附件\5-奖励荣誉证书、著作封面、文章首页、专利证书等\3论文首页"  # 替换为你要检查的目录路径
+directory_to_check = r'C:\Users\xijia\Desktop\新建文件夹\old2'  # 替换为你要检查的目录路径
 rename_and_move_files(directory_to_check)
