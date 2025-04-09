@@ -93,8 +93,8 @@ def process_files(source_folder, output_folder, all_pages=False):
                 convert_pdf_to_jpg(file_path, pdf_output_folder, all_pages)
 
 # 示例使用
-source_folder = r'C:\Users\xijia\Desktop\DoingPlatform\D20250113_省教改质量工程项目开题\相互评审'
-destination_folder = r'C:\Users\xijia\Desktop\DoingPlatform\D20250113_省教改质量工程项目开题\相互评审_pic'
+source_folder = r'C:\Users\xijia\Desktop\D20241206_2024全国大学生数学竞赛“广东赛区”获奖'
+destination_folder = r'C:\Users\xijia\Desktop\D20241206_2024全国大学生数学竞赛“广东赛区”获奖_pic'
 
 
 all_pages = True  # 设置为 True 以转换PDF的所有页面，否则 False 仅转换首页
