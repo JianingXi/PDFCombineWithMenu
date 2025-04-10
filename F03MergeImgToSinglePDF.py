@@ -72,9 +72,9 @@ def images_to_pdf(input_folder, output_pdf_path, compressed_folder, quality):
     print(f"PDF file created: {output_pdf_path}")
 
 # 示例使用
-input_folder = r'C:\Users\素材Temp\'
-compressed_folder = r'C:\Users\Compress'
-output_pdf_path = r'C:\Users\\统计.pdf'
+input_folder = r'C:\Users\xijia\Desktop\DoingPlatform\教创赛省赛提交\E05_附件作证材料\A03图片页码版'
+compressed_folder = r'C:\Users\xijia\Desktop\DoingPlatform\教创赛省赛提交\E05_附件作证材料\A03图片页码版Compress'
+output_pdf_path = r'C:\Users\xijia\Desktop\DoingPlatform\教创赛省赛提交\E05_附件作证材料\A03图片页码版.pdf'
 
 quality = 95  # 设置压缩率，范围在1（最差）到95（最好）之间
 
