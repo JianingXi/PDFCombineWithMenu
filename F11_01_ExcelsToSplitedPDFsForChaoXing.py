@@ -239,13 +239,12 @@ def excel_to_tsv(src_excels, dst_tsv):
 # ----- TSVs to PDFs ----- #
 
 # 拆分列函数
-def split_columns(df, max_total_width=150):
+def split_columns(df, max_total_width=300):
     """
-    将列名按字符长度大致均分为若干组，使每页总宽度尽量接近 max_total_width 且不至于最后一页太少。
+    在保留原始列顺序的基础上，按列宽尽量平均分组，避免最后一页列数太少。
     """
     import numpy as np
 
-    # 估算每列宽度：列名长度 + 平均单元格长度
     est_widths = []
     for col in df.columns:
         col_strs = df[col].astype(str)
@@ -253,29 +252,43 @@ def split_columns(df, max_total_width=150):
         est_width = len(str(col)) + avg_len
         est_widths.append(est_width)
 
-    # 累加并计算总宽度
     total_width = sum(est_widths)
     est_num_pages = max(1, round(total_width / max_total_width))
 
-    # 使用累加法按宽度均分
-    indices = np.arange(len(df.columns))
-    sorted_idx = sorted(indices, key=lambda i: -est_widths[i])  # 按宽度从大到小
-    pages = [[] for _ in range(est_num_pages)]
-    page_widths = [0] * est_num_pages
+    # 初始化分组
+    n = len(df.columns)
+    best_groups = []
+    best_score = float("inf")
 
-    for i in sorted_idx:
-        # 放入当前最“瘦”的页
-        target = page_widths.index(min(page_widths))
-        pages[target].append(df.columns[i])
-        page_widths[target] += est_widths[i]
+    # 尝试不同的页数来找最平衡的分组
+    for num_pages in range(est_num_pages, est_num_pages + 3):
+        group_indices = []
+        i = 0
+        target_width = total_width / num_pages
 
-    # 按原始列顺序排序每页
-    groups = [sorted(page, key=lambda c: df.columns.get_loc(c)) for page in pages]
-    return groups
+        for _ in range(num_pages - 1):
+            acc = 0
+            start = i
+            while i < n and acc + est_widths[i] <= target_width:
+                acc += est_widths[i]
+                i += 1
+            if i == start:  # 当前列已经超宽，也得放进去
+                i += 1
+            group_indices.append(i)
+
+        # 最后一组到末尾
+        splits = np.split(df.columns, group_indices)
+        widths = [sum(est_widths[df.columns.get_loc(col)] for col in group) for group in splits]
+        std_width = np.std(widths)
+
+        if std_width < best_score:
+            best_groups = [list(group) for group in splits]
+            best_score = std_width
+
+    return best_groups
 
 
-
-def tsv_to_pdf(src_tsv_dir, output_pdf_dir):
+def tsv_to_pdf(src_tsv_dir: str, output_pdf_dir: str, second_row_subtitle_chaoxing: bool):
     os.makedirs(output_pdf_dir, exist_ok=True)
     # 主循环
     for fname in sorted(os.listdir(src_tsv_dir)):
@@ -292,14 +305,21 @@ def tsv_to_pdf(src_tsv_dir, output_pdf_dir):
         # 标题和副标题
         base_name = os.path.splitext(fname)[0]
         title_clean = re.sub(r'(_Sheet\d+_part\d+_Sheet\d+)$', '', base_name)
-        subtitle_raw = "  ".join(df_raw.iloc[1].astype(str))
-        subtitle_clean = re.sub(r'[\r\n]+', ' ', subtitle_raw).strip()
+        if second_row_subtitle_chaoxing:
+            subtitle_raw = "  ".join(df_raw.iloc[1].astype(str))
+            subtitle_clean = re.sub(r'[\r\n]+', ' ', subtitle_raw).strip()
+        else:
+            subtitle_clean = 0
+
 
         # 设置表头和正文
         df_raw.columns = df_raw.iloc[0]
-        df_data = df_raw.iloc[2:].reset_index(drop=True)
+        if second_row_subtitle_chaoxing:
+            df_data = df_raw.iloc[2:].reset_index(drop=True)
+        else:
+            df_data = df_raw.iloc[1:].reset_index(drop=True)
 
-        groups = split_columns(df_data, max_total_width=200)
+        groups = split_columns(df_data, max_total_width=300)
         pdf_path = os.path.join(output_pdf_dir, f"{base_name}.pdf")
 
         with PdfPages(pdf_path) as pdf:
@@ -427,14 +447,14 @@ def pdf_rename_remove_merged(pdf_dir: str):
 
 
 # ----- Main ----- #
-def excels_to_splited_pdfs_for_chaoxing(base_dir: str, excel_file_name: str):
+def excels_to_splited_pdfs_for_chaoxing(base_dir: str, excel_file_name: str, output_dir: str, second_row_subtitle_chaoxing: bool):
     src_excel = os.path.join(base_dir, excel_file_name)
     src_folder = os.path.join(base_dir, '拆分单表_raw')
     pkl_dir = os.path.join(base_dir, '拆分单表_pkl')
     excel_dir = os.path.join(base_dir, '拆分单表_excels')
     src_tsv = os.path.join(base_dir, '拆分单表_tsv')
     src_pdf = os.path.join(base_dir, '拆分单表_pdf')
-    output_dir = os.path.join(base_dir, 'Printed_DPFs')
+    output_dir = os.path.join(base_dir, output_dir)
 
     # ----- excels_sheet_head_body_spliter ----- #
     split_sheets_to_excels(src_excel, src_folder)
@@ -446,7 +466,7 @@ def excels_to_splited_pdfs_for_chaoxing(base_dir: str, excel_file_name: str):
 
     # ----- excels_to_pdfs ----- #
     excel_to_tsv(excel_dir, src_tsv)
-    tsv_to_pdf(src_tsv, src_pdf)
+    tsv_to_pdf(src_tsv, src_pdf, second_row_subtitle_chaoxing)
 
     pdf_merge(src_pdf, output_dir)
 
