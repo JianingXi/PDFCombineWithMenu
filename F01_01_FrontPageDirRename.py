@@ -1,7 +1,9 @@
 import os
 import shutil
 
-
+"""
+如果某个文件夹内只有一个文件，则用该文件夹的名词描述该文件，删除空文件夹
+"""
 def rename_and_move_files(directory):
     # 遍历指定目录下的所有文件夹
     for root, dirs, files in os.walk(directory, topdown=False):
@@ -33,5 +35,5 @@ def rename_and_move_files(directory):
 
 
 # 使用示例
-directory_to_check = r'C:\Users\xijia\Desktop\新建文件夹\old2'  # 替换为你要检查的目录路径
-rename_and_move_files(directory_to_check)
+# directory_to_check = r'C:\Users\xijia\Desktop\新建文件夹\old2'  # 替换为你要检查的目录路径
+# rename_and_move_files(directory_to_check)

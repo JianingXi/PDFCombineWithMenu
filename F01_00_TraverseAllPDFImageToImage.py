@@ -97,11 +97,10 @@ def process_files(source_folder, output_folder, is_rot, all_pages=False):
                     os.makedirs(pdf_output_folder)
                 convert_pdf_to_jpg(file_path, pdf_output_folder, is_rot, all_pages)
 
-# 示例使用
-source_folder = r'C:\Users\xijia\Desktop\DoingPlatform\D20250319_第一届“泛雅杯”全国高校智慧课程设计大赛\线性与非线性\E05_附件作证材料1\A01原始整理版'
-destination_folder = r'C:\Users\xijia\Desktop\DoingPlatform\D20250319_第一届“泛雅杯”全国高校智慧课程设计大赛\线性与非线性\E05_附件作证材料1\A02图片整理版'
 
-is_rot = 0  # 设置为非 0 则启用旋转功能，若设置为 0 则不启用
-all_pages = True  # 设置为 True 以转换 PDF 的所有页面，否则 False 仅转换首页
-
-process_files(source_folder, destination_folder, is_rot, all_pages)
+def f01_traverse_all_pdf_image_to_image(source_folder, destination_folder, is_rot, all_pages):
+    """
+    is_rot = 0  # 设置为非 0 则启用旋转功能，若设置为 0 则不启用
+    all_pages = True  # 设置为 True 以转换 PDF 的所有页面，否则 False 仅转换首页
+    """
+    process_files(source_folder, destination_folder, is_rot, all_pages)

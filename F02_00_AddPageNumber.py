@@ -7,9 +7,11 @@ import natsort
 Image.MAX_IMAGE_PIXELS = None
 warnings.simplefilter('error', Image.DecompressionBombWarning)
 
+
 def convert_to_dpi(image, target_dpi):
     image.info['dpi'] = (target_dpi, target_dpi)
     return image
+
 
 def resize_to_target_length(image, target_length):
     if image.width > image.height:
@@ -20,14 +22,17 @@ def resize_to_target_length(image, target_length):
         new_width = int(target_length * image.width / image.height)
     return image.resize((new_width, new_height), Image.LANCZOS)
 
-def add_border_and_pagenumber(image, page_number, target_length, border_size=30, border_color=(255, 255, 255), font_size=20):
+
+def add_border_and_pagenumber(image, page_number, target_length, border_size=30, border_color=(255, 255, 255),
+                              font_size=20):
     img = resize_to_target_length(image, target_length)
     new_width = img.width + 2 * border_size
     new_height = img.height + 2 * border_size
     new_img = Image.new('RGB', (new_width, new_height), border_color)
     new_img.paste(img, (border_size, border_size))
     draw = ImageDraw.Draw(new_img)
-    draw.rectangle([(border_size - 1, border_size - 1), (new_width - border_size, new_height - border_size)], outline="black")
+    draw.rectangle([(border_size - 1, border_size - 1), (new_width - border_size, new_height - border_size)],
+                   outline="black")
     try:
         font = ImageFont.truetype("arial.ttf", int(font_size * 0.75))
     except IOError:
@@ -41,7 +46,9 @@ def add_border_and_pagenumber(image, page_number, target_length, border_size=30,
     draw.text((text_x, text_y), text, fill="black", font=font)
     return new_img
 
-def process_images(input_folder, output_folder, initial_page_number=1, target_dpi=450, target_length=1920, add_border_and_page_number=True):
+
+def process_images(input_folder, output_folder, initial_page_number=1, target_dpi=450, target_length=1920,
+                   add_border_and_page_number=True):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -67,12 +74,14 @@ def process_images(input_folder, output_folder, initial_page_number=1, target_dp
             processed_img.save(output_path, 'JPEG', quality=100, dpi=(target_dpi, target_dpi))
             print(f"Processed {image_path}")
 
-# 示例使用
-input_folder = r'C:\Users\xijia\Desktop\DoingPlatform\教创赛省赛提交\E05_附件作证材料\A02图片整理版'
-output_folder = r'C:\Users\xijia\Desktop\DoingPlatform\教创赛省赛提交\E05_附件作证材料\A03图片页码版'
-initial_page_number = 1  # 设置初始页码
-target_dpi = 800
-target_length = 1920
-add_border_and_page_number = True
 
-process_images(input_folder, output_folder, initial_page_number, target_dpi, target_length, add_border_and_page_number)
+def f02_add_pag_number(input_folder, output_folder, initial_page_number, target_dpi, target_length,
+                       add_border_and_page_number):
+    """
+    initial_page_number = 1  # 设置初始页码
+    target_dpi = 800
+    target_length = 1920
+    add_border_and_page_number = True
+    """
+    process_images(input_folder, output_folder, initial_page_number, target_dpi, target_length,
+                   add_border_and_page_number)
