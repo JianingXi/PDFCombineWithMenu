@@ -143,16 +143,18 @@ def extract_and_pickle(folder_path: str, output_folder: str):
             header_df.to_pickle(header_pkl)
             body_df.to_pickle(body_pkl)
 
+
+
             print(f"✅ {fname} [{sheet_name}]: header → {header_pkl}, body → {body_pkl}")
-
-
-def table_head_split(src_folder, dst_folder_pkl):
-    # src_folder    = r"C:\\拆分单表"
-    # dst_folder    = r"C:\\拆分单表_pkl"
-    extract_and_pickle(src_folder, dst_folder_pkl)
+    row_count = body_df.shape[0]
+    return row_count
 
 
 # ----- Body Split with Heads ----- #
+def best_max_rows(num_row):  # 凑数字，找到最佳max_rows，用于拆分学生
+    candidates = [(r, (r - num_row % r) % r) for r in range(30, 42)]
+    best = min(candidates, key=lambda x: x[1])  # 按delta排序
+    return best[0]  # 返回 max_rows
 
 def split_body_and_export_excels(pkl_folder: str, output_folder: str, max_rows: int = 35):
     """
@@ -238,22 +240,39 @@ def excel_to_tsv(src_excels, dst_tsv):
 
 # 拆分列函数
 def split_columns(df, max_total_width=110):
-    col_widths = df.astype(str).apply(lambda x: x.str.len().max())
-    grouped = []
-    group = []
-    width = 0
+    """
+    将列名按字符长度大致均分为若干组，使每页总宽度尽量接近 max_total_width 且不至于最后一页太少。
+    """
+    import numpy as np
+
+    # 估算每列宽度：列名长度 + 平均单元格长度
+    est_widths = []
     for col in df.columns:
-        w = max(5, min(40, col_widths[col]))
-        if width + w > max_total_width:
-            grouped.append(group)
-            group = [col]
-            width = w
-        else:
-            group.append(col)
-            width += w
-    if group:
-        grouped.append(group)
-    return grouped
+        col_strs = df[col].astype(str)
+        avg_len = col_strs.map(len).mean()
+        est_width = len(str(col)) + avg_len
+        est_widths.append(est_width)
+
+    # 累加并计算总宽度
+    total_width = sum(est_widths)
+    est_num_pages = max(1, round(total_width / max_total_width))
+
+    # 使用累加法按宽度均分
+    indices = np.arange(len(df.columns))
+    sorted_idx = sorted(indices, key=lambda i: -est_widths[i])  # 按宽度从大到小
+    pages = [[] for _ in range(est_num_pages)]
+    page_widths = [0] * est_num_pages
+
+    for i in sorted_idx:
+        # 放入当前最“瘦”的页
+        target = page_widths.index(min(page_widths))
+        pages[target].append(df.columns[i])
+        page_widths[target] += est_widths[i]
+
+    # 按原始列顺序排序每页
+    groups = [sorted(page, key=lambda c: df.columns.get_loc(c)) for page in pages]
+    return groups
+
 
 
 def tsv_to_pdf(src_tsv_dir, output_pdf_dir):
@@ -419,16 +438,16 @@ def excels_to_splited_pdfs_for_chaoxing(base_dir: str, excel_file_name: str):
 
     # ----- excels_sheet_head_body_spliter ----- #
     split_sheets_to_excels(src_excel, src_folder)
-    table_head_split(src_folder, pkl_dir)
-    split_body_and_export_excels(pkl_dir, excel_dir, max_rows=40)
+    num_row = extract_and_pickle(src_folder, pkl_dir)
+    split_body_and_export_excels(pkl_dir, excel_dir, max_rows=best_max_rows(num_row))
 
     delete_folder(src_folder)
     delete_folder(pkl_dir)
 
     # ----- excels_to_pdfs ----- #
-
     excel_to_tsv(excel_dir, src_tsv)
     tsv_to_pdf(src_tsv, src_pdf)
+
     pdf_merge(src_pdf, output_dir)
 
     pdf_with_page_numbers(output_dir)

@@ -5,4 +5,3 @@ excel_file_name = '医技精神药学_统计一键导出.xlsx'
 
 
 excels_to_splited_pdfs_for_chaoxing(base_dir, excel_file_name)
-
