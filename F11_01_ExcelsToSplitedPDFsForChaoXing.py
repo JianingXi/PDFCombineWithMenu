@@ -239,7 +239,7 @@ def excel_to_tsv(src_excels, dst_tsv):
 # ----- TSVs to PDFs ----- #
 
 # 拆分列函数
-def split_columns(df, max_total_width=110):
+def split_columns(df, max_total_width=150):
     """
     将列名按字符长度大致均分为若干组，使每页总宽度尽量接近 max_total_width 且不至于最后一页太少。
     """
@@ -299,7 +299,7 @@ def tsv_to_pdf(src_tsv_dir, output_pdf_dir):
         df_raw.columns = df_raw.iloc[0]
         df_data = df_raw.iloc[2:].reset_index(drop=True)
 
-        groups = split_columns(df_data, max_total_width=110)
+        groups = split_columns(df_data, max_total_width=200)
         pdf_path = os.path.join(output_pdf_dir, f"{base_name}.pdf")
 
         with PdfPages(pdf_path) as pdf:
